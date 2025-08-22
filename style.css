@@ -1,6 +1,5 @@
 html,
 body {
-  overflow: hidden;
   width: 100%;
   height: 100%;
   padding: 0;
@@ -20,6 +19,8 @@ body {
 
   flex-direction: column;
   margin: 10px;
+  overflow: auto;
+
 }
 
 button {
@@ -43,13 +44,53 @@ button {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.translate-container {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  gap: 8px;
+  padding: 0;
+  .translate-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .translate-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+    padding: 18px;
+    .key {
+      font-weight: bold;
+    }
+    .value {
+      opacity: 0.5;
+      font-size: 14px;
+    }
+    .input {
+      margin-top: 4px;
+      padding: 8px;
+      border-radius: 4px;
+      outline: none;
+      color: white;
+      background-color: rgba(255, 255, 255, 0);
+      border: solid 1px rgba(255, 255, 255, 0.2);
+      &.no-input {
+        border-color: red;
+      }
+    }
+  }
+}
+
 .default-language-input-container {
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 800px;
   height: 400px;
-  gap: 8px;
+  gap: 18px;
 
   .title {
     text-align: center;
