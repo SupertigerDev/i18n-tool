@@ -52,9 +52,27 @@ button {
   max-width: 800px;
   gap: 8px;
   padding: 0;
+  overflow: hidden;
   .translate-list {
     display: flex;
     flex-direction: column;
+  }
+  .details {
+    opacity: 0.9;
+    display: flex;
+    gap: 4px;
+    height: 30px;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 14px;
+    background-color: rgba(128, 128, 128, 0.2);
+    .out-of {
+
+    }
+    .percent {
+      opacity: 0.5;
+
+    }
   }
   .translate-item {
     display: flex;

@@ -133,7 +133,7 @@ const createDefaultLanguageInput = () => {
     <div class="title">Default Language</div>
     <textarea id="default-language-input"></textarea>
     <div class="title">Translated Language</div>
-    <textarea disabled id="translated-language-input"></textarea>
+    <textarea id="translated-language-input"></textarea>
   `;
 
   const defaultInput = el.querySelector("#default-language-input");
@@ -233,6 +233,40 @@ const createTranslateList = () => {
   const translatedStrings = flatternTranslations(
     storage.getTranslatedLanguage() || {}
   );
+
+  const defaultStringsLength = defaultStrings.length;
+  const translatedStringsLength = translatedStrings.length;
+
+  const translatedPercent =
+    ((translatedStringsLength / defaultStringsLength) * 100).toFixed(2) + "%";
+
+  const detailsEl = document.createElement("div");
+  detailsEl.classList.add("details");
+  detailsEl.innerHTML = `
+    <div class="out-of">${translatedStringsLength}/${defaultStringsLength}</div>
+    <div class="percent">(${translatedPercent})</div>
+  `;
+
+  storage.onUpdate(() => {
+    const defaultStrings = flatternTranslations(storage.getDefaultLanguage());
+    const translatedStrings = flatternTranslations(
+      storage.getTranslatedLanguage() || {}
+    );
+
+    const defaultStringsLength = defaultStrings.length;
+    const translatedStringsLength = translatedStrings.length;
+
+    const translatedPercent =
+      ((translatedStringsLength / defaultStringsLength) * 100).toFixed(2) + "%";
+
+    detailsEl.classList.add("details");
+    detailsEl.innerHTML = `
+    <div class="out-of">${translatedStringsLength}/${defaultStringsLength}</div>
+    <div class="percent">(${translatedPercent})</div>
+  `;
+  });
+
+  el.appendChild(detailsEl);
 
   const transListEl = document.createElement("div");
   transListEl.classList.add("translate-list");
