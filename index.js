@@ -68,6 +68,14 @@ const caughtJSON = (json) => {
     return {};
   }
 };
+const isValidJSON = (json) => {
+  try {
+    JSON.parse(json);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 const createLocalStorage = () => {
   let updateEventHandlers = [];
@@ -142,9 +150,27 @@ const createDefaultLanguageInput = () => {
   defaultInput.value = storage.getRawDefaultLanguage();
   translatedInput.value = storage.getRawTranslatedLanguage();
 
+  const checkInvalid = () => {
+    if (!isValidJSON(storage.getRawDefaultLanguage())) {
+      defaultInput.classList.add("invalid");
+    } else {
+      defaultInput.classList.remove("invalid");
+    }
+
+    if (
+      storage.getRawTranslatedLanguage() &&
+      !isValidJSON(storage.getRawTranslatedLanguage())
+    ) {
+      translatedInput.classList.add("invalid");
+    } else {
+      translatedInput.classList.remove("invalid");
+    }
+  };
+
   storage.onUpdate(() => {
-    defaultInput.value = storage.getRawDefaultLanguage();
     translatedInput.value = storage.getRawTranslatedLanguage();
+    defaultInput.value = storage.getRawDefaultLanguage();
+    checkInvalid();
   });
 
   defaultInput.placeholder = JSON.stringify(
@@ -169,6 +195,8 @@ const createDefaultLanguageInput = () => {
     null,
     2
   );
+
+  checkInvalid();
 
   const onChange = () => {
     const defaultValue = defaultInput.value;
@@ -202,6 +230,16 @@ const createTranslateItem = (key, value, translated) => {
   if (!translated.trim()) {
     input.classList.add("no-input");
   }
+
+  input.addEventListener("keypress", (e) => {
+    if (
+      storage.getRawTranslatedLanguage() &&
+      !isValidJSON(storage.getRawTranslatedLanguage())
+    ) {
+      e.preventDefault();
+      return;
+    }
+  });
 
   input.addEventListener("input", () => {
     const value = el.querySelector(".input").value;

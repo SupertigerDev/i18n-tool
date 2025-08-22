@@ -15,12 +15,11 @@ body {
 
 #root {
   display: flex;
+  overflow: auto;
   align-items: center;
 
   flex-direction: column;
   margin: 10px;
-  overflow: auto;
-
 }
 
 button {
@@ -45,41 +44,38 @@ button {
 }
 
 .translate-container {
-  margin-top: 8px;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   width: 100%;
   max-width: 800px;
-  gap: 8px;
   padding: 0;
-  overflow: hidden;
+  margin-top: 8px;
   .translate-list {
     display: flex;
     flex-direction: column;
   }
   .details {
-    opacity: 0.9;
     display: flex;
-    gap: 4px;
-    height: 30px;
     align-items: center;
+    height: 30px;
     padding-left: 10px;
-    font-size: 14px;
+    opacity: 0.9;
     background-color: rgba(128, 128, 128, 0.2);
+    font-size: 14px;
+    gap: 4px;
     .out-of {
-
     }
     .percent {
       opacity: 0.5;
-
     }
   }
   .translate-item {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
     padding: 18px;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+    gap: 4px;
     .key {
       font-weight: bold;
     }
@@ -88,13 +84,13 @@ button {
       font-size: 14px;
     }
     .input {
-      margin-top: 4px;
       padding: 8px;
+      margin-top: 4px;
+      border: solid 1px rgba(255, 255, 255, 0.2);
       border-radius: 4px;
       outline: none;
       color: white;
       background-color: rgba(255, 255, 255, 0);
-      border: solid 1px rgba(255, 255, 255, 0.2);
       &.no-input {
         border-color: red;
       }
@@ -123,6 +119,8 @@ button {
     outline: none;
     color: white;
     background-color: rgba(255, 255, 255, 0);
-    resize: none;
+    &.invalid {
+      border-color: red;
+    }
   }
 }
