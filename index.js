@@ -220,8 +220,8 @@ const createTranslateItem = (key, value, translated) => {
   const el = document.createElement("div");
   el.classList.add("translate-item");
   el.innerHTML = `
-    <div class="key">${key.join(".")}</div>
-    <div class="value"></div>
+  <div class="value"></div>
+  <div class="key">${key.join(".")}</div>
     <input class="input" placeholder="Translate" type="text" value="${translated}"></input>
   `;
   const valueEl = el.querySelector(".value");

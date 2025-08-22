@@ -76,10 +76,10 @@ button {
     padding: 18px;
     border-bottom: solid 1px rgba(255, 255, 255, 0.2);
     gap: 4px;
-    .key {
+    .value {
       font-weight: bold;
     }
-    .value {
+    .key {
       opacity: 0.5;
       font-size: 14px;
     }
