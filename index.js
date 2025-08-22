@@ -88,13 +88,13 @@ const createLocalStorage = () => {
   const getDefaultLanguage = () => caughtJSON(getRawDefaultLanguage());
   const getTranslatedLanguage = () => caughtJSON(getRawTranslatedLanguage());
 
-  const setDefaultLanguage = (value) => {
+  const setDefaultLanguage = (value, { onInput } = { onInput: false }) => {
     localStorage.setItem("defaultLanguage", value);
-    updateEventHandlers.forEach((cb) => cb());
+    updateEventHandlers.forEach((cb) => cb({ onInput: onInput }));
   };
-  const setTranslatedLanguage = (value) => {
+  const setTranslatedLanguage = (value, { onInput } = { onInput: false }) => {
     localStorage.setItem("translatedLanguage", value);
-    updateEventHandlers.forEach((cb) => cb());
+    updateEventHandlers.forEach((cb) => cb({ onInput: onInput }));
   };
 
   if (!getRawDefaultLanguage()) {
@@ -167,9 +167,11 @@ const createDefaultLanguageInput = () => {
     }
   };
 
-  storage.onUpdate(() => {
-    translatedInput.value = storage.getRawTranslatedLanguage();
-    defaultInput.value = storage.getRawDefaultLanguage();
+  storage.onUpdate((opts) => {
+    if (!opts.onInput) {
+      defaultInput.value = storage.getRawDefaultLanguage();
+      translatedInput.value = storage.getRawTranslatedLanguage();
+    }
     checkInvalid();
   });
 
@@ -202,8 +204,8 @@ const createDefaultLanguageInput = () => {
     const defaultValue = defaultInput.value;
     const translatedValue = translatedInput.value;
 
-    storage.setDefaultLanguage(defaultValue);
-    storage.setTranslatedLanguage(translatedValue);
+    storage.setDefaultLanguage(defaultValue, { onInput: true });
+    storage.setTranslatedLanguage(translatedValue, { onInput: true });
   };
 
   defaultInput.addEventListener("input", onChange);
@@ -285,7 +287,36 @@ const createTranslateList = () => {
     <div class="percent">(${translatedPercent})</div>
   `;
 
-  storage.onUpdate(() => {
+  const transListEl = document.createElement("div");
+  transListEl.classList.add("translate-list");
+
+  const loadTransItems = () => {
+    const defaultStrings = flatternTranslations(storage.getDefaultLanguage());
+    const translatedStrings = flatternTranslations(
+      storage.getTranslatedLanguage() || {}
+    );
+
+    return defaultStrings.map((item) => {
+      const translated = translatedStrings.find(
+        (i) => i.key.join(".") === item.key.join(".")
+      );
+      const transItem = createTranslateItem(
+        item.key,
+        item.value,
+        translated?.value || ""
+      );
+      transItem.el.classList.add("default-language-item");
+      transItem.el.addEventListener("click", () => {});
+
+      transListEl.appendChild(transItem.el);
+
+      return transItem;
+    });
+  };
+
+  let transItems = loadTransItems();
+
+  storage.onUpdate((opts) => {
     const defaultStrings = flatternTranslations(storage.getDefaultLanguage());
     const translatedStrings = flatternTranslations(
       storage.getTranslatedLanguage() || {}
@@ -299,30 +330,18 @@ const createTranslateList = () => {
 
     detailsEl.classList.add("details");
     detailsEl.innerHTML = `
-    <div class="out-of">${translatedStringsLength}/${defaultStringsLength}</div>
-    <div class="percent">(${translatedPercent})</div>
-  `;
+      <div class="out-of">${translatedStringsLength}/${defaultStringsLength}</div>
+      <div class="percent">(${translatedPercent})</div>
+    `;
+    if (opts.onInput) {
+      transItems.forEach((e) => {
+        e.el.remove();
+      });
+      transItems = loadTransItems();
+    }
   });
 
   el.appendChild(detailsEl);
-
-  const transListEl = document.createElement("div");
-  transListEl.classList.add("translate-list");
-
-  defaultStrings.forEach((item) => {
-    const translated = translatedStrings.find(
-      (i) => i.key.join(".") === item.key.join(".")
-    );
-    const transItem = createTranslateItem(
-      item.key,
-      item.value,
-      translated?.value || ""
-    );
-    transItem.el.classList.add("default-language-item");
-    transItem.el.addEventListener("click", () => {});
-
-    transListEl.appendChild(transItem.el);
-  });
 
   el.appendChild(transListEl);
 
