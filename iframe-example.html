@@ -1,0 +1,32 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      src="https://supertigerdev.github.io/i18n-tool/"
+      height="800"
+      width="600"
+      frameborder="0"
+      id="iframe"
+    ></iframe>
+  </body>
+
+  <script>
+    const iframe = document.getElementById("iframe");
+
+    iframe.addEventListener("load", () => {
+      iframe.contentWindow.postMessage(
+        { default: { test: "lol" }, translated: {} },
+        "https://supertigerdev.github.io/i18n-tool/"
+      );
+    });
+  </script>
+</html>

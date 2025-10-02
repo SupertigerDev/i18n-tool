@@ -97,21 +97,23 @@ const createLocalStorage = () => {
     updateEventHandlers.forEach((cb) => cb({ onInput: onInput }));
   };
 
+  const defaultLang = JSON.stringify(
+    {
+      loginPage: {
+        title: "Login to continue",
+        username: "Username",
+        password: "Password",
+      },
+    },
+    null,
+    2
+  );
+
   if (!getRawDefaultLanguage()) {
-    setDefaultLanguage(
-      JSON.stringify(
-        {
-          loginPage: {
-            title: "Login to continue",
-            username: "Username",
-            password: "Password",
-          },
-        },
-        null,
-        2
-      )
-    );
+    setDefaultLanguage(defaultLang);
   }
+
+  const isDefaultLang = getRawDefaultLanguage() === defaultLang;
 
   const onUpdate = (cb) => {
     updateEventHandlers.push(cb);
@@ -121,6 +123,7 @@ const createLocalStorage = () => {
   };
   return {
     onUpdate,
+    isDefaultLang,
     offUpdate,
     getDefaultLanguage,
     getTranslatedLanguage,
@@ -349,3 +352,19 @@ const createTranslateList = () => {
 };
 
 createTranslateList();
+
+window.addEventListener("message", (event) => {
+  const data = event.data;
+  const defaultLang = data.default;
+  const translatedLang = data.translated;
+
+  console.log(storage.isDefaultLang, storage.getRawTranslatedLanguage());
+
+  if (!storage.isDefaultLang || storage.getRawTranslatedLanguage()) {
+    const userChoice = confirm("Do you want to discard existing changes?");
+    if (!userChoice) return;
+  }
+  // console.log({ defaultLang, translatedLang });
+  // storage.setDefaultLanguage(JSON.stringify(defaultLang));
+  // storage.setTranslatedLanguage(JSON.stringify(translatedLang));
+});
