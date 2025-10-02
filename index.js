@@ -368,13 +368,10 @@ window.addEventListener("message", (event) => {
   const defaultLang = data.default;
   const translatedLang = data.translated;
 
-  console.log(storage.isDefaultLang, storage.getRawTranslatedLanguage());
-
   if (!storage.isDefaultLang || storage.getRawTranslatedLanguage()) {
     const userChoice = confirm("Do you want to discard existing changes?");
     if (!userChoice) return;
   }
-  console.log({ defaultLang, translatedLang });
   setTimeout(() => {
     storage.setDefaultLanguage(JSON.stringify(defaultLang));
     storage.setTranslatedLanguage(JSON.stringify(translatedLang));
