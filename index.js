@@ -121,12 +121,16 @@ const createLocalStorage = () => {
   const offUpdate = (cb) => {
     updateEventHandlers = updateEventHandlers.filter((item) => item !== cb);
   };
+  const triggerUpdate = () => {
+    updateEventHandlers.forEach((cb) => cb({ onInput: true }));
+  };
   return {
     onUpdate,
     isDefaultLang,
     offUpdate,
     getDefaultLanguage,
     getTranslatedLanguage,
+    triggerUpdate,
     setDefaultLanguage,
     setTranslatedLanguage,
     getRawDefaultLanguage,
@@ -364,7 +368,10 @@ window.addEventListener("message", (event) => {
     const userChoice = confirm("Do you want to discard existing changes?");
     if (!userChoice) return;
   }
-  // console.log({ defaultLang, translatedLang });
-  // storage.setDefaultLanguage(JSON.stringify(defaultLang));
-  // storage.setTranslatedLanguage(JSON.stringify(translatedLang));
+  console.log({ defaultLang, translatedLang });
+  setTimeout(() => {
+    storage.setDefaultLanguage(JSON.stringify(defaultLang));
+    storage.setTranslatedLanguage(JSON.stringify(translatedLang));
+    storage.triggerUpdate();
+  }, 100);
 });
