@@ -279,6 +279,8 @@ const createTranslateList = () => {
   const defaultStrings = flatternTranslations(storage.getDefaultLanguage());
   const translatedStrings = flatternTranslations(
     storage.getTranslatedLanguage() || {}
+  ).filter((item) =>
+    defaultStrings.find((i) => i.key.join(".") === item.key.join("."))
   );
 
   const defaultStringsLength = defaultStrings.length;
@@ -301,6 +303,8 @@ const createTranslateList = () => {
     const defaultStrings = flatternTranslations(storage.getDefaultLanguage());
     const translatedStrings = flatternTranslations(
       storage.getTranslatedLanguage() || {}
+    ).filter((item) =>
+      defaultStrings.find((i) => i.key.join(".") === item.key.join("."))
     );
 
     return defaultStrings.map((item) => {
@@ -327,6 +331,8 @@ const createTranslateList = () => {
     const defaultStrings = flatternTranslations(storage.getDefaultLanguage());
     const translatedStrings = flatternTranslations(
       storage.getTranslatedLanguage() || {}
+    ).filter((item) =>
+      defaultStrings.find((i) => i.key.join(".") === item.key.join("."))
     );
 
     const defaultStringsLength = defaultStrings.length;
